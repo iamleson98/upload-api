@@ -29,27 +29,29 @@ func ZipUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(10 << 20) // at most 10MB allowed
 
-	fmt.Println(r.Header)
-	file, handler, err := r.FormFile("file")
+	fmt.Println(r.Body)
+
+	// get fuploaded .zip file with key
+	file, fileHeader, err := r.FormFile("file")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		logger.Logger.Error().Msg(err.Error())
 		return
 	}
-
 	defer file.Close()
+
 	if mime, err := utils.ContentDetector(file); err != nil || mime != "application/zip" {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusForbidden)
 		w.Write([]byte("only .zip files are accepted\n"))
 		return
 	}
 
-	logger.Logger.Info().Msg(fmt.Sprintf("Got file name: %s size: %d", handler.Filename, handler.Size))
+	logger.Logger.Info().Msg(fmt.Sprintf("Got file name: %s size: %d", fileHeader.Filename, fileHeader.Size))
 
 	ch := make(chan error)
 	timer := time.After(3 * time.Minute)
 
-	go zipper.ZipExtractHandler(file, ch)
+	go zipper.ZipExtractHandler(file, fileHeader, ch)
 
 	for {
 		select {
