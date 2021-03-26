@@ -26,18 +26,17 @@ func init() {
 
 	sec := file.Section("jwt-token")
 	if sec == nil {
-		logger.Logger.Debug().Msg("section jwt-token not found")
+		logger.Logger.Error().Msg("section jwt-token not found")
 		os.Exit(1)
 	}
 
-	salt := sec.Key("salt").String()
-	if salt != "" {
-		SecretSalt = salt
+	SecretSalt = sec.Key("salt").String()
+	if SecretSalt != "" {
 		logger.Logger.Info().Msg("Successfully assigned value to salt")
 	} else {
-		logger.Logger.Debug().Msg("key named salt not found")
+		logger.Logger.Error().Msg("key named salt not found")
+		os.Exit(1)
 	}
 
-	dur := sec.Key("expire_duration").MustDuration(3 * time.Hour)
-	DefaultTokenExpireDuration = dur
+	DefaultTokenExpireDuration = sec.Key("expire_duration").MustDuration(3 * time.Hour)
 }
