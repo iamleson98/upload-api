@@ -29,8 +29,6 @@ func ZipUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(10 << 20) // at most 10MB allowed
 
-	fmt.Println(r.Body)
-
 	// get fuploaded .zip file with key
 	file, fileHeader, err := r.FormFile("file")
 	if err != nil {
@@ -49,6 +47,8 @@ func ZipUploadHandler(w http.ResponseWriter, r *http.Request) {
 	logger.Logger.Info().Msg(fmt.Sprintf("Got file name: %s size: %d", fileHeader.Filename, fileHeader.Size))
 
 	ch := make(chan error)
+	// the zip extract function should take less than 3 mins
+	// otherwise, function will return
 	timer := time.After(3 * time.Minute)
 
 	go zipper.ZipExtractHandler(file, fileHeader, ch)
@@ -61,9 +61,9 @@ func ZipUploadHandler(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(err.Error()))
 			} else {
+				logger.Logger.Debug().Msg("upzipped successfully")
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte("upzipped successfully\n"))
-				logger.Logger.Debug().Msg("upzipped successfully")
 			}
 			return
 		case <-timer:
