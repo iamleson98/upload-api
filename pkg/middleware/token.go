@@ -25,7 +25,7 @@ func ValidateToken(next http.Handler) http.Handler {
 		_, err := token.ValidateAccessToken(tokenString)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("token was corrupted or expires"))
+			w.Write([]byte(err.Error()))
 			return
 		}
 
