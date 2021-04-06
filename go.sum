@@ -22,6 +22,8 @@ github.com/go-chi/chi v4.0.2+incompatible h1:maB6vn6FqCxrpz4FqWdh4+lwpyZIQS7YEAU
 github.com/go-chi/chi v4.0.2+incompatible/go.mod h1:eB3wogJHnLi3x/kFX2A+IbTBlXxmMeXJVKy9tTv1XzQ=
 github.com/go-chi/chi/v5 v5.0.1 h1:ALxjCrTf1aflOlkhMnCUP86MubbWFrzB3gkRPReLpTo=
 github.com/go-chi/chi/v5 v5.0.1/go.mod h1:DslCQbL2OYiznFReuXYUmQ2hGd1aDpCnlMNITLSKoi8=
+github.com/go-chi/valve v0.0.0-20170920024740-9e45288364f4 h1:JYZmrkBDj6LwUbsRysF9tpLnz59npoZSI3KG2XHqvHw=
+github.com/go-chi/valve v0.0.0-20170920024740-9e45288364f4/go.mod h1:F4ZINQr5T71wO1JOmdQsGTBew+njUAXn65LLGjuagwY=
 github.com/go-openapi/jsonpointer v0.19.3 h1:gihV7YNZK1iK6Tgwwsxo2rJbD1GTbdm72325Bq8FI3w=
 github.com/go-openapi/jsonpointer v0.19.3/go.mod h1:Pl9vOtqEWErmShwVjC8pYs9cog34VGT37dQOVbmoatg=
 github.com/go-openapi/jsonpointer v0.19.5 h1:gZr+CIYByUqjcgeLXnQu2gHYQC9o73G2XUeOFYEICuY=
