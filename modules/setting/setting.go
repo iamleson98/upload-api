@@ -12,6 +12,7 @@ var (
 	// security
 	SecretSalt                 string
 	DefaultTokenExpireDuration time.Duration
+	Port                       int
 )
 
 func init() {
@@ -37,6 +38,14 @@ func init() {
 		logger.Logger.Error().Msg("key named salt not found")
 		os.Exit(1)
 	}
+
+	serverSec := file.Section("server")
+	if sec == nil {
+		logger.Logger.Error().Msg("section server not found")
+		os.Exit(1)
+	}
+	Port = serverSec.Key("port").MustInt(8000)
+	logger.Logger.Info().Msg("Successfully assigned value to port")
 
 	DefaultTokenExpireDuration = sec.Key("expire_duration").MustDuration(3 * time.Hour)
 }
