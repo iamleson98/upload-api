@@ -52,24 +52,22 @@ func ZipUploadHandler(w http.ResponseWriter, r *http.Request) {
 	timer := time.After(3 * time.Minute)
 
 	go zipper.ZipExtractHandler(file, fileHeader, ch)
-
-	for {
-		select {
-		case err := <-ch:
-			if err != nil {
-				logger.Logger.Error().Msg(err.Error())
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(err.Error()))
-			} else {
-				logger.Logger.Debug().Msg("upzipped successfully")
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte("upzipped successfully\n"))
-			}
-			return
-		case <-timer:
-			logger.Logger.Error().Msg("time out")
-			w.WriteHeader(http.StatusRequestTimeout)
-			return
+	
+	select {
+	case err := <-ch:
+		if err != nil {
+			logger.Logger.Error().Msg(err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		} else {
+			logger.Logger.Debug().Msg("upzipped successfully")
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("upzipped successfully\n"))
 		}
+		return
+	case <-timer:
+		logger.Logger.Error().Msg("time out")
+		w.WriteHeader(http.StatusRequestTimeout)
+		return
 	}
 }
